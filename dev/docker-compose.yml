@@ -3,9 +3,9 @@ version: '3'
 services:
   
   php:
-    build: ./php
+    build: ./php-images
     volumes:
-      - ./php/public:/var/www
+      - ../project/public:/var/www
     restart: always
     depends_on: 
       - postgres
@@ -17,10 +17,10 @@ services:
     ports:
       - ${NGINX_PORTS:-80:80}
     volumes:
-      - ./php/public:/var/www
+      - ../project/public:/var/www
       - ./nginx:/etc/nginx/conf.d
     environment:
-      SERVER_NAME: "hello.dev"
+      SERVER_NAME: "localhost"
     networks:
       - backend
     
@@ -35,7 +35,6 @@ services:
       - ${POSTGRES_PORTS:-5432:5432}
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d/
     networks:
       - backend
 

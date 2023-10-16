@@ -3,7 +3,9 @@ version: '3'
 services:
   
   php:
-    build: ./php
+    build: 
+      context: ../
+      dockerfile: ./prod/images/php/Dockerfile
     restart: always
     depends_on: 
       - postgres
@@ -11,11 +13,13 @@ services:
       - backend
 
   nginx:
-    image: nginx:1.25.2-alpine
+    build: 
+      context: ../
+      dockerfile: ./prod/images/nginx/Dockerfile
     ports:
       - ${NGINX_PORTS:-80:80}
     environment:
-      SERVER_NAME: "hello.dev"
+      SERVER_NAME: "localhost"
     networks:
       - backend
     
@@ -30,7 +34,6 @@ services:
       - ${POSTGRES_PORTS:-5432:5432}
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d/
     networks:
       - backend
       

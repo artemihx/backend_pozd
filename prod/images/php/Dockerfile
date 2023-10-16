@@ -8,4 +8,6 @@ RUN apk --no-cache update \
     \
     && docker-php-ext-install pdo_pgsql
         
+COPY project/public /var/www
+
 CMD ["php-fpm"]
