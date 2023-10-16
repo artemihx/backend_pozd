@@ -4,8 +4,6 @@ services:
   
   php:
     build: ./php
-    volumes:
-      - ./php/public:/var/www
     restart: always
     depends_on: 
       - postgres
@@ -16,9 +14,8 @@ services:
     image: nginx:1.25.2-alpine
     ports:
       - ${NGINX_PORTS:-80:80}
-    volumes:
-      - ./php/public:/var/www
-      - ./nginx:/etc/nginx/conf.d
+    environment:
+      SERVER_NAME: "hello.dev"
     networks:
       - backend
     

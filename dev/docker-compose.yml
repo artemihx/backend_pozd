@@ -19,6 +19,8 @@ services:
     volumes:
       - ./php/public:/var/www
       - ./nginx:/etc/nginx/conf.d
+    environment:
+      SERVER_NAME: "hello.dev"
     networks:
       - backend
     

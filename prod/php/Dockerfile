@@ -1,19 +1,11 @@
 FROM php:8.1-fpm-alpine
 
-RUN apt-get update && apt-get install -y \
-        curl \
-        wget \
-        git \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-	libpng-dev \
-	libonig-dev \
-	libzip-dev \
-	libmcrypt-dev \
-        && pecl install mcrypt-1.0.3 \
-	&& docker-php-ext-enable mcrypt \
-        && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
-	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
-        && docker-php-ext-install -j$(nproc) gd 
+RUN apk --no-cache update \
+    && apk add --no-cache autoconf g++ make \
+    postgresql-dev \
+    \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    \
+    && docker-php-ext-install pdo_pgsql
         
 CMD ["php-fpm"]
