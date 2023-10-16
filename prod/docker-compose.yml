@@ -29,21 +29,11 @@ services:
     ports:
       - ${POSTGRES_PORTS:-5432:5432}
     volumes:
-      - ./db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d/
     networks:
       - backend
-
-  adminer:
-    image: adminer:4.8.1-standalone
-    restart: always
-    depends_on: 
-      - postgres
-    ports:
-      - ${ADMINER_PORTS:-8080:8080}
-    networks:
-      - backend
-
+      
 networks:
   backend:  
     driver: bridge
