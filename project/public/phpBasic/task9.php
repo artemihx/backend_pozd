@@ -69,4 +69,17 @@ function fibonacci(int $x)
 echo '<br>';
 echo fibonacci(10);
 
+$n = 10;
+$fib = [0, 1];
+for($i = 2; $i <= $n; ++$i)
+{
+    $fib[] = $fib[$i -1] + $fib[$i -2];
+}
+
+echo "<br>Fib: ";
+foreach ($fib as $el)
+{
+    echo $el . ' ';
+}
+
 ?>
