@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  
+  php:
+    build: 
+      context: ../
+      dockerfile: ./prod/images/php/Dockerfile
+    restart: always
+    depends_on: 
+      - postgres
+    networks:
+      - backend
+
+  nginx:
+    build: 
+      context: ../
+      dockerfile: ./prod/images/nginx/Dockerfile
+    ports:
+      - ${NGINX_PORTS:-80:80}
+    environment:
+      SERVER_NAME: "localhost"
+    networks:
+      - backend
+    
+  postgres:
+    image: postgres:16.0-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_NAME:-root}
+      - POSTGRES_USER=${DB_USER:-root}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-root}
+    ports:
+      - ${POSTGRES_PORTS:-5432:5432}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+      
+networks:
+  backend:  
+    driver: bridge
+volumes:
+  db_data:
+    driver: local

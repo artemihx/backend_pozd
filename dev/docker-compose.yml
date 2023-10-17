@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  
+  php:
+    build: ./php-images
+    volumes:
+      - ../project/public:/var/www
+    restart: always
+    depends_on: 
+      - postgres
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:1.25.2-alpine
+    ports:
+      - ${NGINX_PORTS:-80:80}
+    volumes:
+      - ../project/public:/var/www
+      - ./nginx:/etc/nginx/conf.d
+    environment:
+      SERVER_NAME: "localhost"
+    networks:
+      - backend
+    
+  postgres:
+    image: postgres:16.0-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_NAME:-root}
+      - POSTGRES_USER=${DB_USER:-root}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-root}
+    ports:
+      - ${POSTGRES_PORTS:-5432:5432}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  adminer:
+    image: adminer:4.8.1-standalone
+    restart: always
+    depends_on: 
+      - postgres
+    ports:
+      - ${ADMINER_PORTS:-8080:8080}
+    networks:
+      - backend
+
+networks:
+  backend:  
+    driver: bridge
+volumes:
+  db_data:
+    driver: local
