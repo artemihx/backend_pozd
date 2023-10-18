@@ -8,4 +8,6 @@ RUN apk --no-cache update \
     \
     && docker-php-ext-install pdo_pgsql
         
+COPY php.ini /usr/local/etc/php/conf.d/40-custom.ini
+
 CMD ["php-fpm"]
