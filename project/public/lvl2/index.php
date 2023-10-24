@@ -1,61 +1,42 @@
 <?php
 
-function myAutoLoader(string $className)
+use Exceptions\DbException;
+
+function myAutoLoader(string $className): void
 {
-    require_once __DIR__ . '/'  . str_replace('\\', '/', $className) . '.php';
+
+    require_once str_replace('\\', '/', $className) . '.php';
 }
 
-spl_autoload_register('myAutoLoader');
+try {
+    spl_autoload_register('myAutoLoader');
 
-$author = new Models\User\User('Иван');
-$article = new Models\Articles\Article('Заголовок', 'Текст', $author);
+    $route = $_GET['route'] ?? '';
+    $routes = require('routes.php');
 
+    $isRouteFound = false;
+    foreach ($routes as $pattern => $controllerAndAction) {
+        preg_match($pattern, $route, $matches);
+        if (!empty($matches)) {
+            $isRouteFound = true;
+            unset($matches[0]);
 
-/*
-if(!empty($_GET['name']))
-{
-    $controller->sayHello($_GET['name']);
-}
-else
-{
-    $controller->main();
-}
-*/
+            $controllerName = $controllerAndAction[0];
+            $actionName = $controllerAndAction[1];
 
-echo '<br>';
-
-
-$route = $_GET['route'] ?? '';
-$routes = require __DIR__ . '/routes.php';
-
-
-
-$pattern = '~^hello/(.*)$~';
-preg_match($pattern, $route, $matches);
-
-$isRouteFound = false;
-
-foreach ($routes as $pattern => $controllerAndAction)
-{
-    preg_match($pattern, $route, $matches);
-    
-    if(!empty($matches))
-    {
-        $isRouteFound = true;
-        break;
+            $controller = new $controllerName();
+            $controller->$actionName(...$matches);
+            break;
+        }
     }
+
+    if (!$isRouteFound) {
+        throw new Exceptions\NotFoundException();
+    }
+} catch (Exceptions\DbException $e) {
+    $view = new View\View(__DIR__ . '/templates/errors');
+    $view->renderHtml('500.php', ['error' => $e->getMessage()], 500);
+} catch (Exceptions\NotFoundException $e) {
+    $view = new \View\View(__DIR__ . '/templates/errors');
+    $view->renderHtml('404.php', ['error' => $e->getMessage()], 404);
 }
-
-if(!$isRouteFound)
-{
-    echo 'Страница не найдена';
-    return;
-}
-
-unset($matches[0]);
-
-$controllerName = $controllerAndAction[0];
-$actionName = $controllerAndAction[1];
-
-$controller = new $controllerName();
-$controller->$actionName(...$matches);
