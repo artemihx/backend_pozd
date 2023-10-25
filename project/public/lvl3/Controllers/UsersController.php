@@ -9,16 +9,8 @@ use Models\User\UsersAuthService;
 use Services\EmailSender;
 use View\View;
 
-class UsersController
+class UsersController extends AbstractController
 {
-    /** @var View */
-    private $view;
-
-    public function __construct()
-    {
-        $this->view = new View(__DIR__ . '/../templates');
-    }
-
     public function signUp()
     {
         if (!empty($_POST))
@@ -66,5 +58,11 @@ class UsersController
             }
         }
         $this->view->renderHtml('users/login.php');
+    }
+
+    public function logout()
+    {
+        setcookie('token', '', 0, '/', '', false, true);
+        header('Location: /');
     }
 }

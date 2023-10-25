@@ -27,6 +27,7 @@ class UsersAuthService
         }
         if($user->getAuthToken() !== $authToken)
         {
+            echo "НИХУЯ НЕ РАБОТАЕТ";
             return null;
         }
 

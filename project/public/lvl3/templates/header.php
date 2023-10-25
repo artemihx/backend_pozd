@@ -15,7 +15,13 @@
     </tr>
     <tr>
         <td colspan="2" style="text-align: right">
-            <?= !empty($user) ? 'Привет, ' . $user->getNickname() : 'Войдите на сайт' ?>
+            <? if(!empty($user)): ?>
+            Привет, <?= $user->getNickname() . ' | '?> <a href="/users/logout">Выйти</a>
+            <? else: ?>
+            <a href="/users/login">Войти</a>
+                <a href="/users/register">Зарегистироваться</a>
+            <? endif; ?>
+        </td>
         </td>
     </tr>
     <tr>

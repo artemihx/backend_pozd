@@ -41,10 +41,16 @@ class User extends ActiveRecordEntity
         return $this->auth_token;
     }
 
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
     private function refreshAuthToken()
     {
-        $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
+        $this->auth_token = sha1(random_bytes(100)) . sha1(random_bytes(100));
     }
+
     public static function signUp(array $userData)
     {
         if (empty($userData['nickname'])) {
@@ -109,7 +115,7 @@ class User extends ActiveRecordEntity
         }
 
         $user = User::findOneByColumn('email', $loginData['email']);
-
+        
         if($user === null)
         {
             throw new InvalidArgumentException('Нет пользователя с таким email');
@@ -125,7 +131,7 @@ class User extends ActiveRecordEntity
 
         $user->refreshAuthToken();
         $user->save();
-
+        
         return $user;
     }
 

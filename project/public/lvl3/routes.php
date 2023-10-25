@@ -8,6 +8,7 @@ return [
     '~^articles/add$~' => [\Controllers\ArticlesController::class, 'add'],
     '~^articles/(\d+)$~' => [\Controllers\ArticlesController::class, 'view'],
     '~^users/register$~' => [\Controllers\UsersController::class, 'signUp'],
+    '~^users/logout$~' => [\Controllers\UsersController::class, 'logout'],
     '~^users/login$~' => [\Controllers\UsersController::class, 'login'],
     '~^$~' => [\Controllers\MainController::class, 'main'],
 ];
