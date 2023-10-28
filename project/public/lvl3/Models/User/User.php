@@ -7,13 +7,13 @@ use Models\ActiveRecordEntity;
 
 class User extends ActiveRecordEntity
 {
-    protected $nickname;
-    protected $email;
-    protected $is_confirmed;
-    protected $role;
-    protected $password;
-    protected $auth_token;
-    protected $created_at;
+    protected string $nickname;
+    protected string $email;
+    protected int $is_confirmed;
+    protected string $role;
+    protected string $password;
+    protected string $auth_token;
+    protected string $created_at;
 
 
     public function getNickname(): string
@@ -46,12 +46,12 @@ class User extends ActiveRecordEntity
         return $this->role;
     }
 
-    private function refreshAuthToken()
+    private function refreshAuthToken(): void
     {
         $this->auth_token = sha1(random_bytes(100)) . sha1(random_bytes(100));
     }
 
-    public static function signUp(array $userData)
+    public static function signUp(array $userData): User
     {
         if (empty($userData['nickname'])) {
             throw new InvalidArgumentException('Не передан nickname');

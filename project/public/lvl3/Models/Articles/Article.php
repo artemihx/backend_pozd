@@ -8,10 +8,10 @@ use Models\User\User;
 
 class Article extends ActiveRecordEntity
 {
-    protected $article_name;
-    protected $text;
-    protected $author_id;
-    protected $created_at;
+    protected string $article_name;
+    protected string $text;
+    protected int $author_id;
+    protected string $created_at;
 
     protected static function getTableName(): string 
     {

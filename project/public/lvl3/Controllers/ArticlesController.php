@@ -12,7 +12,7 @@ use Exceptions\NotFoundException;
 
 class ArticlesController extends AbstractController
 {
-    public function view(int $articleId)
+    public function view(int $articleId): void
     {
         $comment = Comment::findAllByColumn('articles_id',$articleId);
         $result = Article::getById($articleId);
@@ -133,7 +133,7 @@ class ArticlesController extends AbstractController
         }
     }
 
-    public function commentEdit(int $commentId)
+    public function commentEdit(int $commentId): void
     {
         $comment = Comment::getById($commentId);
         if($comment === null)

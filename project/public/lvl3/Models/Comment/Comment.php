@@ -10,10 +10,10 @@ Use Models\Articles\Article;
 
 class Comment extends ActiveRecordEntity
 {
-    protected $authorId;
-    protected $articlesId;
-    protected $text;
-    protected $date;
+    protected int $authorId;
+    protected int $articlesId;
+    protected string $text;
+    protected string $date;
 
     protected static function getTableName(): string
     {
@@ -38,27 +38,27 @@ class Comment extends ActiveRecordEntity
     {
         return $this->articlesId;
     }
-    public function getDate()
+    public function getDate(): string
     {
         return $this->date;
     }
 
-    public function setText(string $text)
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
 
-    public function setAuthorId(int $authorId)
+    public function setAuthorId(int $authorId): void
     {
         $this->authorId = $authorId;
     }
 
-    public function setArticleId(int $articleId)
+    public function setArticleId(int $articleId): void
     {
         $this->articlesId = $articleId;
     }
 
-    public function setDate($date)
+    public function setDate($date): void
     {
         $this->date = $date;
     }
@@ -73,7 +73,7 @@ class Comment extends ActiveRecordEntity
         $this->save();
         return $this;
     }
-    public static function createFromArray(array $fields, User $author, Article $article)
+    public static function createFromArray(array $fields, User $author, Article $article): Comment
     {
         if (empty($fields['text']))
         {
